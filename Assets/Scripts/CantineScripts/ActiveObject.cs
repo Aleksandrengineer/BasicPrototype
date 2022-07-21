@@ -5,22 +5,15 @@ using Mirror;
 
 public class ActiveObject : NetworkBehaviour
 {
-    public GameObject interactableText;
     public GameObject activeObjectWindow;
 
-    private void OnTriggerStay(Collider other) {
-        if (other.tag == "Player" && !isLocalPlayer)
-            interactableText.SetActive(true);
-            EnableActiveObjectWindow();
-    }
-    private void OnTriggerExit(Collider other) {
-        if (other.tag == "Player")
-        interactableText.SetActive(false);
-        activeObjectWindow.SetActive(false);
-    }
-
-    private void EnableActiveObjectWindow()
+    /*private void OnTriggerStay(Collider other) 
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.E) && activeObjectWindow.activeInHierarchy == false)
         {    
             activeObjectWindow.SetActive(true);
@@ -32,4 +25,29 @@ public class ActiveObject : NetworkBehaviour
             interactableText.SetActive(true);
         }
     }
+    private void OnTriggerExit(Collider other) 
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        if (other.tag == "Player" && !isLocalPlayer)
+        interactableText.SetActive(false);
+        activeObjectWindow.SetActive(false);
+    }*/
+
+    public void EnableActiveObjectWindow()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && activeObjectWindow.activeInHierarchy == false)
+        {    
+            activeObjectWindow.SetActive(true);
+        }
+        else if (Input.GetKeyDown(KeyCode.E) && activeObjectWindow.activeInHierarchy == true)
+        {
+            activeObjectWindow.SetActive(false);
+        }
+    }
+
+
 }

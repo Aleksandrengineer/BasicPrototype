@@ -16,6 +16,8 @@ public class PlayerController: NetworkBehaviour
     public Camera playerCamera;
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
+    public GameObject interactableText;
+    public ActiveObject activeObjectScript;
 
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
@@ -38,6 +40,9 @@ public class PlayerController: NetworkBehaviour
         {
             playerCamera.gameObject.SetActive(false);
         }
+
+        //Find the interactable object
+        activeObjectScript = GameObject.FindGameObjectWithTag("Active Object").GetComponent<ActiveObject>();
     }
 
     void Update()
@@ -86,5 +91,37 @@ public class PlayerController: NetworkBehaviour
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
+    }
+
+    private void OnTriggerStay(Collider other) 
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        interactableText.SetActive(true);    
+
+        if (Input.GetKeyDown(KeyCode.E) && activeObjectScript.activeObjectWindow.activeInHierarchy == false)
+        {    
+            activeObjectScript.EnableActiveObjectWindow();
+            interactableText.SetActive(false);
+        }
+        else if (Input.GetKeyDown(KeyCode.E) && activeObjectScript.activeObjectWindow.activeInHierarchy == true)
+        {
+            activeObjectScript.EnableActiveObjectWindow();
+            interactableText.SetActive(true);
+        }
+    }
+    private void OnTriggerExit(Collider other) 
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        //if (other.tag == "Player" && !isLocalPlayer)
+        interactableText.SetActive(false);
+        activeObjectScript.activeObjectWindow.SetActive(false);
     }
 }
